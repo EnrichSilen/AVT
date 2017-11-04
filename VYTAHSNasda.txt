@@ -1,3 +1,5 @@
+;Autor: Daniel Snášel 
+;Verze: 1.0
 #program VYTAHSN        ;stisk=0
 #unit 0,1,digin8out8,x0,y0,on
 #def Tlac0 S31.0	;prizemi

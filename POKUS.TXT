@@ -1,3 +1,5 @@
+;Autor: Daniel Snášel 
+;Verze: 1.0
 #program pokusnov
 #unit 0,1,digin8out8,x0,y0,on
 #def tldol x0.4 ;0.6

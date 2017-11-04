@@ -1,4 +1,6 @@
-	 #program krizprosnasi
+;Autor: Daniel Snášel 
+;Verze: 1.0
+#program krizprosnasi
 #unit 0,1,DIGIN8out8,x0,y0,on
 #def cykl x0.0
 #def blikat x0.1
