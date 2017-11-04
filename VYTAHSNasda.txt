@@ -1,0 +1,174 @@
+#program VYTAHSN        ;stisk=0
+#unit 0,1,digin8out8,x0,y0,on
+#def Tlac0 S31.0	;prizemi
+#def Tlac1 S31.1	;prvn¡ paatro
+#def Tlac2 S31.2	;druhy
+#def Tlac3 S31.3	;treti
+#def Tlac4 x0.6		;ctvrty
+#def Tlac5 x0.7		;paty
+#def tlac6 x0.3		;sesty
+#def spinac x0.4	;spinac v patrech , =0 v najetm stavu (setnutem)
+#def nulov x0.5		;nulova n¡ citace £prizem¡, =0 v najetem stavu
+#def dvere x0.2 	;spinac dveri blokuje jizdu, =1 dvere jsou zavreny
+#def podlaha_spin x0.1	; =1 tlac vytahu, =0 funkcni talc na patrech
+#def nahorrych y0.3	;rychle nahoru
+#def nahorpomalu y0.2	;pomalu naohoru
+#def dolupomalu y0.1	;pomalu dolu
+#def dolurychle y0.0	;rychle dolz
+#def sadatlac y0.7 	;0= funkcni tlac ve vytahu, =1 funkcn¡ tlac na patrech
+#def LED0 y0.4		;bit0 kodu indikace led ve vytahu
+#def LED1 y0.5		;bit0 kodu indikace led ve vytah
+#def LED2 y0.6		;bit0 kodu indikace led ve vytah
+#reg word cil, patro, rozdil ;ted jsou worth
+#reg bit spinacST, spinac1, nahoru, dolu, PRVZAP
+#reg word nahorucas, dolucas
+#reg bit nahoruzpoz, doluzpoz
+
+p 63	;probehne jen jednou 
+LD 1 
+SET tlac0	;pro simulaci aby nebyli vçechny tlac¡tka stisk
+SET tlac1
+SET tlac2
+SET tlac3
+SET tlac4
+SET tlac5
+SET tlac6
+SET nulov
+SET PRVZAP
+e 63
+
+p 0
+LD PRVZAP
+JMC provoz
+SET dolupomalu
+LDC nulov		;LDC protoze =0 v  najetem stavu
+RES dolupomalu
+RES PRVZAP 
+JMP konec
+provoz:
+LD tlac0	;stisk = 0
+JMD dale0	;nestisk = 1 - neskocim
+LD 0		;zapis 0 do cil
+WR cil
+
+dale0:
+LD tlac1
+JMD dale1
+LD 1
+WR cil
+
+dale1:
+LD tlac2
+JMD dale2
+LD 2
+WR cil
+dale2:
+
+LD tlac3
+JMD dale3
+LD 3 
+WR cil
+dale3:
+
+LD tlac4
+JMD dale4
+LD 4
+WR cil
+dale4:
+
+Ld tlac5
+JMD dale5
+LD 5
+WR cil
+dale5:
+
+Ld tlac6
+JMD dale6
+LD 6
+WR cil
+dale6:
+
+LDC spinac    ;nactu spinac obracene
+LET spinacST	; zapamatuje povodni hodnotu
+WR spinac1  	; zapise do spinace
+
+LD nahorrych
+OR nahorpomalu
+WR nahoru
+
+LD dolurychle
+OR dolupomalu
+WR dolu
+
+LD nahoruzpoz
+AND spinac1  
+LD doluzpoz
+AND spinac1
+LDC nulov
+CNT patro
+
+LD cil		;nacte reg cil
+LD patro	;nacte reg £patro
+SUB		;cil - patro 
+WR rozdil	;zapise rozdil do registru
+
+LD 1
+RES nahorrych
+RES nahorpomalu
+RES dolurychle
+RES dolupomalu
+
+LD rozdil
+GT 2
+ANC rozdil.5
+AND dvere
+SET nahorrych														
+SET nahorpomalu
+
+Ld rozdil
+EQ 2
+AND dvere
+SET nahorrych
+
+LD rozdil
+EQ 1
+AND dvere
+SET nahorpomalu
+																				
+Ld rozdil
+LT -2
+AND rozdil.5
+AND dvere
+SET dolurychle
+SET dolupomalu
+
+LD rozdil
+EQ -2
+AND dvere
+SET dolurychle
+
+LD rozdil
+EQ -1
+AND dvere
+SET dolupomalu
+konec:
+
+LD nahoru
+LD 6   
+TON  nahorucas.1
+WR nahoruzpoz
+
+LD dolu
+LD 6
+TON dolucas.1
+WR doluzpoz
+
+LD patro.0
+WR LED0
+LD patro.1
+WR LED1
+LD patro.2
+WR LED2																			
+ 
+e 0										
+																																																

@@ -1,0 +1,64 @@
+#program pokusnov
+#unit 0,1,digin8out8,x0,y0,on
+#def tldol x0.4 ;0.6
+#def tldop x0.5 ;0.5
+#def dol y0.1	
+#def dop y0.0 																																												
+#def stop x0.6  ;0.4
+#def pomalu y0.2
+#def K1 x0.0
+#def K2 x0.1
+#def K3 x0.2
+#def K4 x0.3
+#reg word casK4
+#reg bit cask4K
+#reg word casK1
+#reg bit cask1K
+;__________________________________AHOJ___________________________________
+p 0 ; koncen definic
+
+;prve tlacitko
+ld tldol
+OR dol
+OR cask4K
+ANC stop
+ANC K1
+ANC dop
+WR dol
+
+;druhe tlacitko
+ld tldop
+OR dop
+OR cask1K
+ANC stop
+ANC K4
+ANC dol
+WR dop
+
+;pomalu do prava
+LD dop
+AND K2
+SET pomalu
+LD K3
+And dop
+RES pomalu
+
+;pomalu do leva
+LD dol
+AND K3
+SET pomalu
+LD K2
+AND dol
+RES pomalu
+;
+LD K4
+LD 10
+TON casK4.2
+WR cask4K
+
+;
+LD K1
+LD 10
+TON casK1.2              
+WR cask1K
+e 0																

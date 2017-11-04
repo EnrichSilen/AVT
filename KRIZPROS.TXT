@@ -1,0 +1,94 @@
+	 #program krizprosnasi
+#unit 0,1,DIGIN8out8,x0,y0,on
+#def cykl x0.0
+#def blikat x0.1
+#def reset x0.2
+#reg word citac, cipre
+
+p 0
+LD blikat 
+JMC provoz ;skok
+RES y0
+LD S13.2
+SET y0.4
+SET y0.1
+LD 55
+WR citac
+JMP konec
+
+provoz:
+LD cykl
+AND s13.2 ;sekundy = 2 !!!!!
+LD reset
+RES y0
+CTU citac ;coutn up +1
+
+LD citac 
+GT 61 ;kdyz bude 62
+RES LOW citac
+RES HIGH citac
+;prvni sloupec
+LD citac
+EQ 1
+RES y0 ; vçe zhasne
+SET y0.7
+SET y0.3
+SET y0.2
+;druhy sloupec
+LD citac
+EQ 20
+RES y0
+SET y0.6
+SET y0.3
+SET y0.1
+;treti sloupec
+LD citac
+EQ 24
+RES y0
+SET y0.6
+SET y0.4
+SET y0.3
+SET y0.0
+;ctvrty
+LD citac
+EQ 31
+RES y0
+SET y0.6
+SET y0.5
+SET y0.0
+;paty
+LD citac
+EQ 51
+RES y0
+SET y0.6
+SET y0.4
+SET y0.0
+;sesty
+LD citac
+EQ 56
+RES y0
+SET y0.6
+SET y0.3
+SET y0.0
+;sedmy																																																									
+LD citac
+EQ 59
+RES y0
+SET y0.6
+SET y0.3
+SET y0.1
+SET y0.0
+;citac na prechodu
+LD y0.6
+AND s13.2
+LD reset
+CTD cipre
+LD citac
+EQ 20
+JMC konec
+LD 43
+WR cipre
+konec:
+
+e 0
+																																																																				

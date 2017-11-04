@@ -1,0 +1,108 @@
+#program PRACKASNASI
+#unit 0,1,DIGIN8out8,x0,y0,on
+;----------VALUE---------------
+#def doprava y0.0 
+#def doleva y0.1
+#def zdimani_leve y0.2
+#def vypousteni y0.3
+#def ohrev y0.4 
+#def napousteni y0.5
+#def prani y0.7 
+#def start x0.0
+#def stop x0.1
+#def reset x0.2
+#def teplota x0.5
+#def hladina x0.7
+#reg word citac, Citpra
+#reg bit jede
+;--------ENDVALUE--------------
+p 0			;start programu
+LD start		;stiskunt¡ startu  --- spus¡ proces
+SET jede		;zapneme bit jede 
+LD stop			;stisknut¡ stop --- zastaven¡ procesu 
+RES jede
+
+LD jede			;kdyz bude zapnutì byt jede tak program
+ANC napousteni		;kdyz nebude napousteni
+ANC ohrev		;kdyz nebude ohrev
+AND S13.2		;zapnuti tikani
+LD reset		;pri stisku talcitka reset
+CTU citac		;Zapnut¡ citac
+																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																								
+LD citac		;nacteme citac
+EQ 3			;kdyz citac = 3
+RES y0			;vypneme vçechny Y
+SET doprava 		;zapneme doprava
+
+LD citac
+EQ 10			;citac = 10
+SET napousteni		;zapneme napousteni
+RES doprava		;vypneme podprava
+SET doleva		;zapneme doleva
+
+LD hladina		;nacteme stisknut¡ 
+RES napousteni		;vypnut¡ napusteni
+ 
+LD citac
+EQ 15			; citac = 15 vypneme doleva
+RES doleva
+
+LD citac 
+EQ 20			;citac = 20, zapnu ohýev a prani
+SET ohrev
+SET prani
+
+LD teplota		;stikneme teplotu, vypneme ohrev
+RES ohrev
+
+LD citac		;citac = 71, vyp prani, zap vypousteni
+EQ 71
+RES prani
+SET vypousteni
+
+LD citac		;citac = 75, zap doleva, zap zdimani
+EQ 75
+SET doleva
+SET zdimani_leve
+
+LD citac 
+EQ 80			;citac = 80, vyp zdimani
+RES zdimani_leve
+
+LD citac
+EQ 85			;citac = 85, vyp vçe
+RES low citac
+RES high citac
+RES low citpra
+RES high citpra
+RES jede
+RES y0
+
+LD prani		;nactu pran¡
+AND S13.2  		;zapni p¡p n¡
+LD reset		; pri  stisku resetu
+CTU citpra		; zapnit¡ citpra
+
+LD citpra		;citpra 1.3.6.9.10 zapn¡nan¡ a vyp¡nan¡ toŸeni do leva,oprava
+EQ 1
+RES doprava
+SET doleva
+
+LD citpra
+EQ 3
+RES doleva
+
+LD citpra
+EQ 6
+SET doprava
+
+LD citpra
+EQ 8
+RES doprava
+
+LD citpra
+EQ 10
+RES low citpra
+RES high citpra
+
+e 0
